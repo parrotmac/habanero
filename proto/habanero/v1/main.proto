@@ -1,0 +1,57 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+
+package proto.habanero.v1;
+
+message Sensor {
+  string id = 1;
+  string identifier = 2;
+  string type = 3;
+  string location = 4;
+}
+
+message SensorReading {
+  string sensor_id = 1;
+  google.protobuf.Timestamp timestamp = 2;
+  double moisture = 3;
+}
+
+message GetSensorReadingsRequest {
+  string sensor_id = 1;
+  google.protobuf.Timestamp start = 2;
+}
+
+message GetSensorReadingsResponse {
+  repeated SensorReading readings = 1;
+}
+
+message GetSensorsRequest {}
+
+message GetSensorsResponse {
+  repeated Sensor sensors = 1;
+}
+
+message GetIndividualSensorReadingsRequest {
+  string sensor_id = 1;
+  google.protobuf.Timestamp start = 2;
+  google.protobuf.Timestamp end = 3;
+}
+
+message GetIndividualSensorReadingsResponse {
+  repeated SensorReading readings = 1;
+}
+
+message ActivateWateringRequest {
+  string sensor_id = 1;
+  int64 duration_ms = 2;
+}
+
+message ActivateWateringResponse {}
+
+service SensorService {
+  rpc GetSensors(GetSensorsRequest) returns (GetSensorsResponse) {}
+  rpc GetSensorReadings(GetSensorReadingsRequest) returns (GetSensorReadingsResponse) {}
+  rpc GetIndividualSensorReadings(GetIndividualSensorReadingsRequest) returns (GetIndividualSensorReadingsResponse) {}
+  rpc ActivateWatering(ActivateWateringRequest) returns (ActivateWateringResponse) {}
+}
